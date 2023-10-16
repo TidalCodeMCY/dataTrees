@@ -47,3 +47,21 @@ console.log(mergeSort(test));
 /* The console should return the following array
 [2,3,12,14,55,67,1123,2134,5556,23222,55556,67876] */
 
+
+//This function will take an array and remove any duplicates
+
+function removeDups(arr){
+    const newArray = [];
+
+    if(Array.isArray(arr)){
+        arr.forEach((element) => {
+            if(!newArray.includes(element)){
+                newArray.push(element);
+            }
+        });
+        return newArray;
+    }else{
+        console.log('needs to pass an array');
+        return null;
+    }
+}
