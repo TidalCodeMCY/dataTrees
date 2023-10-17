@@ -27,7 +27,11 @@ export default class Queue{
     }
 
     enqueue(value){
-        this.items.push(value);
+        if(value === null){
+            return null;
+        }else{
+            this.items.push(value);
+        }
     }
 
     dequeue(){
@@ -54,25 +58,3 @@ export default class Queue{
         console.log(this.items.toString());
     }
 }
-
-const queue = new Queue();
-
-queue.enqueue(45);
-queue.enqueue(63);
-console.log(queue.peek());
-queue.enqueue(134);
-queue.enqueue(65);
-
-
-console.log(queue.dequeue());
-console.log(queue.peek());
-
-queue.dequeue();
-queue.print();
-
-queue.enqueue(456);
-queue.print();
-
-console.log(queue.size(),queue.isEmpty());
-queue.dequeue();
-queue.print();
