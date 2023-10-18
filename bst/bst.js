@@ -55,21 +55,36 @@ export default class Tree {
     }
 
     getHeight(root){
-        let left; 
-        let right;
-
         if(root === null){
-            return 0;
+            return -1;
         }
 
-        if(!root.left){
-            
-        }else if(!root.right){
-            
-        }
+        return 1+Math.max(this.getHeight(root.left),this.getHeight(root.right));  
+    }
 
-        
-        return 1 + Math.max(this.getHeight(root.left),this.getHeight(root.right));  
+    getDepth(root, x){
+        // Base case
+        if (root == null)
+        return -1;
+
+        // Initialize distance as -1
+        var dist = -1;
+
+        // Check if x is current node=
+        if ((root.value == x)|| 
+ 
+        // Otherwise, check if x is
+        // present in the left subtree
+        (dist = this.getDepth(root.left, x)) >= 0 || 
+     
+        // Otherwise, check if x is
+        // present in the right subtree
+        (dist = this.getDepth(root.right, x)) >= 0)
+
+        // Return depth of the node
+        return dist + 1;
+     
+    return dist;
     }
 
     inOrder(root, array){
@@ -152,6 +167,32 @@ export default class Tree {
            } 
         }
     }
+ 
+    rebalance(){
+        if(this.isEmpty()){
+            return null;
+        }else{
+            const newList = this.inOrder(this.root);
+            this.root = null;
+            this.build(newList);
+        }
+    }
+
+    isBalanced(root){
+        if (root === null){
+            return true;
+        }
+
+        let left = this.getHeight(root.left);
+        let right = this.getHeight(root.right);
+
+        if(Math.abs(left - right) <= 1 && this.isBalanced(
+            root.left)== true && this.isBalanced( root.right) == true){
+            return true;
+        }
+
+        return false; 
+    }
 
     isEmpty(){
         return this.root === null;
@@ -182,7 +223,7 @@ export default class Tree {
             const sorted = mergeSort(array);
             const middle = Math.floor(sorted.length/2);
             const mid = sorted.splice(middle,1);
-
+            
             if(this.root === undefined){
                 this.root = null;
                 this.insert(mid[0]);
@@ -191,13 +232,29 @@ export default class Tree {
                 if(sorted.length < 1){
                     return;
                 }
-                this.insert(mid[0]);
-                this.build(sorted);
+                const left = sorted.splice(0,middle-1);
+                const right = sorted.splice(0,sorted.length);
+
+                this.buildTree(left);
+                this.buildTree(right);
+                //this.insert(mid[0]);
+                //this.build(sorted);
             }
         }else{
             return null;
         }
         return this.root;
+    }
+
+
+    buildTree(array){
+        if(array.length > 0){
+            this.insert(array[Math.floor(array.length/2)]);
+            array.splice(Math.floor(array.length/2),1);
+            this.buildTree(array);
+        }else { 
+            return
+        }
     }
 
     insertNode(root, newNode){
@@ -217,7 +274,6 @@ export default class Tree {
     }
 
     findPos(val, node){
-
         if(val === node.value){
             return node;
         }else if(val < node.value){
@@ -241,20 +297,5 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     }
 };
 
-const tree = new Tree();
-console.log(tree.isEmpty());
 
-tree.build([35,36,43,22,5555,34]);
-tree.insert(33);
-tree.insert(44);
-tree.insert(22);
-console.log(tree.find(5555, tree.root));
-console.log(tree.search(tree.root, 33));
-tree.print();
-console.log(tree.postOrder(tree.root));
-console.log(tree.getHeight(find(34)));
-tree.delete(33);
-tree.print();
-console.log(tree.getHeight(tree.root));
-//[12,33,5555,44,32,1,78,3,45,5,6666,12,33,5,6666]
 
