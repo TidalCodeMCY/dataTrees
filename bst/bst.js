@@ -1,6 +1,6 @@
 import mergeSort from "./mergesort.js";
 import Queue from "./queue.js";
-
+//This is the class constructor of nodes for the bst
 class Node {
     constructor(value){
         this.value = value;
@@ -8,7 +8,7 @@ class Node {
         this.right = null;
     }
 }
-
+/*  */
 export default class Tree {
     constructor(array){
         this.root = this.build(array);
@@ -63,27 +63,16 @@ export default class Tree {
     }
 
     getDepth(root, x){
-        // Base case
-        if (root == null)
-        return -1;
+        if (root == null){
+            return -1;
+        }
+    
+        let dist = -1;
 
-        // Initialize distance as -1
-        var dist = -1;
-
-        // Check if x is current node=
-        if ((root.value == x)|| 
- 
-        // Otherwise, check if x is
-        // present in the left subtree
-        (dist = this.getDepth(root.left, x)) >= 0 || 
-     
-        // Otherwise, check if x is
-        // present in the right subtree
-        (dist = this.getDepth(root.right, x)) >= 0)
-
-        // Return depth of the node
-        return dist + 1;
-     
+        if ((root.value == x) || (dist = this.getDepth(root.left, x)) >= 0 || (dist = this.getDepth(root.right, x)) >= 0){
+            return dist + 1;
+        }
+        
     return dist;
     }
 
@@ -172,8 +161,8 @@ export default class Tree {
         if(this.isEmpty()){
             return null;
         }else{
-            const newList = this.inOrder(this.root);
-            this.root = null;
+            const newList = this.preOrder(this.root);
+            this.root = undefined;
             this.build(newList);
         }
     }
@@ -232,7 +221,7 @@ export default class Tree {
                 if(sorted.length < 1){
                     return;
                 }
-                const left = sorted.splice(0,middle-1);
+                const left = sorted.splice(0,middle);
                 const right = sorted.splice(0,sorted.length);
 
                 this.buildTree(left);
@@ -251,7 +240,12 @@ export default class Tree {
         if(array.length > 0){
             this.insert(array[Math.floor(array.length/2)]);
             array.splice(Math.floor(array.length/2),1);
-            this.buildTree(array);
+            
+            const left = array.splice(0,Math.floor(array.length/2));
+            const right = array.splice(0, array.length);
+
+            this.buildTree(left);
+            this.buildTree(right);
         }else { 
             return
         }
@@ -298,4 +292,34 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 };
 
 
+//The script below is the driver script for the tree to show functionality.
+const tree = new Tree(createArray());
+console.log(`Tree is balanced :`,tree.isBalanced(tree.root));
+console.log(`Height of tree :`,tree.getHeight(tree.root));
+console.log(`Depth of the node valued at 45 :`,tree.getDepth(tree.root, 45));
+console.log(`PostOrder :`,tree.postOrder(tree.root));
+console.log(`InOrder :`,tree.inOrder(tree.root));
+console.log(`PreOrder :`,tree.preOrder(tree.root));
+console.log(`LevelOrder :`,tree.levelOrder(tree.root));
+tree.insert(456);
+tree.insert(556);
+tree.insert(476);
+tree.insert(496);
+tree.insert(426);
+console.log(`Tree is balanced:`, tree.isBalanced(tree.root));
+tree.rebalance();
+console.log(`Tree is balanced:`, tree.isBalanced(tree.root));
+//tree.print();
+
+
+function createArray(){
+    let array = [];
+    let x = 250;
+
+    for(let s = 0;s < x; s++){
+        array.push(Math.floor(Math.random() * (100 - 1) + 1));
+    }
+
+    return array;
+}
 
